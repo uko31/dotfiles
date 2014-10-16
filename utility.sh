@@ -16,3 +16,11 @@ function log {
   
   return 0
 }
+
+function process_dir {
+  return 0
+}
+
+function process_file {
+  return 0
+}
