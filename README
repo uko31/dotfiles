@@ -1,1 +1,11 @@
-These are useful bash scripts in my environment.
+bashrc
+  typical .bashrc with "source" input for the additional scripts
+
+env.sh
+  environment variables & aliases
+  
+utility.sh
+  utility functions such as log(), dl(), etc.
+  
+multimedia.sh
+  convert, concat, transform media files
