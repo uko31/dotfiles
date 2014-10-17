@@ -2,58 +2,52 @@
 #
 #  Multimedia set of functions
 #    mp4() => convert $input to mp4 using ffmpeg
-#    list() => create a list and concat video files into a bigger one
-#      this one can be named in a more accurate way
+#    concat() => create a list and concat video files into a bigger one using ffmpeg
 #
 # m.gregoriades@gmail.com
 
+# mp4 function assumes at least one arg
+#   the first one is the name of the media file to be converted in mp4 format
+#   the next arguments are ffmpeg options to be added between [input] and [output]
 function mp4 {
+   local input ext output
+   local options=""
    
    input="$1";
-   ext=${input##*.}
-   output=${input##*/}".mp4"
-   options=""
+   output="${input##*/}.mp4"
 
    shift
-   while [[ $1 ]]
-   do
-      case $1 in
-         "-ss" )
-            options="$options -ss $2"
-            shift
-            ;;
-         "-t" )
-            options="$options -t $2"
-            shift
-            ;;
-      esac
-      shift
-   done
-   
+   [[ $* ]] && otpions="$*"
+
    ffmpeg -i "$input" -strict -2 $options "$output"
    
    return 0
-   
 }
 
-function list {
+# concat function assumes one or two arg
+#   the first one is the pattern use to select the files to be concatenated
+#   the second one is the output filename (minus the extension which is always mp4)
+#     if no 2nd arg is provided, the pattern becomes the filename
+function concat {
+  local pattern 
+  local dest
 
-  [ "$1" ] || return 1
-  if [ "$2" ];
-    then
-      dest="$2"
-    else
-      dest="$1"
+  [[ $1 ]] || { echo "This function requires an argument => exiting..."; return 1; }
+  pattern="$1"
+  if [[ $2 ]]
+  then
+    dest="$2"
+  else
+    dest="$pattern"
   fi
-  echo "building list file for [$1] in file 'list $1'"
-  printf "file '%s'\n" "$1"* > "list $1"
-  cat "list $1"
-  ffmpeg -f concat -i "list $1" -codec copy "$dest.mp4"
-  rm "list $1"
+  echo "building list file for [$pattern] in file 'list-$pattern'"
+  printf "file '%s'\n" "$pattern"* > "list-$pattern"
+  cat "list-$pattern"
+  ffmpeg -f concat -i "list-$pattern" -codec copy "$dest.mp4"
+  rm "list-$pattern"
   
   return 0
-
 }
 
 export function mp4
-export function list
+export function concat
