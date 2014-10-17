@@ -7,39 +7,12 @@
 
 alias ls='ls --color=auto'
 alias ll='ls -lh'
-alias pacman='sudo pacman'
-alias tran='transmission-remote nas -l'
+alias pc='sudo pacman'
+alias tl='transmission-remote nas -l'
 
 PS1='[\u@\h \W]\$ '
 
-function mp4 {
-   input=$1;
-   ext=${input##*.}
-   output=$(basename "$input" .$ext)".mp4"
-
-   ffmpeg -i "$input" -strict -2 "$output"
-}
-export function mp4
-
-function list {
-
-  [ "$1" ] || return 1
-  if [ "$2" ];
-    then
-      dest="$2"
-    else
-      dest="$1"
-  fi
-  echo "building list file for [$1] in file 'list $1'"
-  printf "file '%s'\n" "$1"* > "list $1"
-  cat "list $1"
-  ffmpeg -f concat -i "list $1" -codec copy "$dest.mp4"
-  rm "list $1"
-  
-  return 0
-
-}
-export function list
+source $HOME/.sources/multimedia.sh
 
 function dl {
    downloads="$HOME/dl"
