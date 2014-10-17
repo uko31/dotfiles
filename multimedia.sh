@@ -8,11 +8,32 @@
 # m.gregoriades@gmail.com
 
 function mp4 {
-   input=$1;
+   
+   input="$1";
    ext=${input##*.}
-   output=$(basename "$input" .$ext)".mp4"
+   output=${input##*/}".mp4"
+   options=""
 
-   ffmpeg -i "$input" -strict -2 "$output"
+   shift
+   while [[ $1 ]]
+   do
+      case $1 in
+         "-ss" )
+            options="$options -ss $2"
+            shift
+            ;;
+         "-t" )
+            options="$options -t $2"
+            shift
+            ;;
+      esac
+      shift
+   done
+   
+   ffmpeg -i "$input" -strict -2 $options "$output"
+   
+   return 0
+   
 }
 
 function list {
