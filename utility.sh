@@ -29,7 +29,7 @@ function dl {
 
    if [[ $1 ]]
    then
-      [[ -f $1 -o -f $downloads/$1 ]] || { echo "File [$1] doesn't exist => exiting..."; return 2; }
+      [[ -f $1 || -f $downloads/$1 ]] || { echo "File [$1] doesn't exist => exiting..."; return 2; }
       [[ -f $1 ]] && "src=$1"
       [[ -f $downloads/$1 ]] && src="$downloads/$1"
       mv -v "$src" "$dst"
@@ -43,6 +43,21 @@ function dl {
    return 0
 }
 
+function usb {
+  local root="$HOME/usb"
+  local mount=0
+
+  [[ $1 ]] || { echo "no name specified => exiting..."; retun 1; }
+  [[ -d $root/$1 ]] || { echo "the device does not exist => exiting..."; return 2; }
+  [[ $(mount | grep "$root/$1") ]] && mount=1 
+  [[ $mount = 1 ]] || mount "$root/$1"
+  [[ $? = 0 ]] || { echo "unable to mount $root/$1 => exiting..."; return 3; }
+  cd "$root/$1"
+  ls -lh
+  
+  return 0
+}
+
 function process_dir {
   return 0
 }
@@ -52,5 +67,5 @@ function process_file {
 }
 
 export function dl
-
+export function usb
 # end of shell
