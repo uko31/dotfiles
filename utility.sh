@@ -43,15 +43,13 @@ function dl {
    return 0
 }
 
-function usb {
-  local root="$HOME/usb"
-  local mount=0
+function mnt {
+  local root="$HOME/mnt"
 
-  [[ $1 ]] || { echo "no name specified => exiting..."; retun 1; }
-  [[ -d $root/$1 ]] || { echo "the device does not exist => exiting..."; return 2; }
-  [[ $(mount | grep "$root/$1") ]] && mount=1 
-  [[ $mount = 1 ]] || mount "$root/$1"
-  [[ $? = 0 ]] || { echo "unable to mount $root/$1 => exiting..."; return 3; }
+  [[ $1 ]] || { echo "no device specified => exiting..."; retun 1; }
+  [[ -d $root/$1 ]] || { echo "the device [$root/$1] does not exist => exiting..."; return 2; }
+  [[ $(grep "$root/$1" /etc/mtab) ]] || mount "$root/$1"
+  [[ $? = 0 ]] || { echo "unable to mount [$root/$1] => exiting..."; return 3; }
   cd "$root/$1"
   ls -lh
   
@@ -67,5 +65,5 @@ function process_file {
 }
 
 export function dl
-export function usb
+export function mnt
 # end of shell
