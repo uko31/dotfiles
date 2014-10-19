@@ -9,6 +9,10 @@ alias ls='ls --color=auto'
 alias ll='ls -lh'
 alias pc='sudo pacman'
 alias tl='transmission-remote nas -l'
+alias fat='mnt fat'
+alias kgb='mnt kgb'
+alias pif='mnt pif'
+alias nas='mnt nas'
 
 PS1='[\u@\h \W]\$ '
 
