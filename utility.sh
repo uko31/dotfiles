@@ -22,7 +22,7 @@ function log {
 # or dl can accept one arg per file to be moved.
 function dl {
    local downloads="$HOME/dl"
-   local dst="$HOME/nas/downloads"
+   local dst="$HOME/mnt/nas/downloads"
    local src nb
 
    [[ -d  "$dst" ]] || { echo "Destination directory [$dst] doesn't exist => exiting..."; return 1; }
@@ -56,6 +56,49 @@ function mnt {
   return 0
 }
 
+function tor {
+  local opt arg
+  local cmd="transmission-remote nas"
+
+  [[ $1 ]] || opt="None";
+  [[ $1 ]] && opt=$1;
+  
+  case $opt in
+    "None" )
+      $cmd -l
+      ;;
+    "r" )
+      arg=$2
+      $cmd -t $arg -r
+      ;;
+    "d" )
+      if [[ $2 ]]
+      then
+	arg=$2
+	echo "Download limited to $arg kb/s"
+	$cmd -d $arg
+      else
+	arg=$2
+	echo "No download limit"
+	$cmd -D
+      fi
+      ;;
+    "f" )
+      arg=$2
+      $cmd -t $arg -f
+      ;;
+    * )
+      echo "tor: transmission home made utility"
+      echo "default  => list current torrents"
+      echo "'r [id]' => delete or remove [id] torrent"
+      echo "'d [id]' => download limit to [id] or unlimited id no [id] provided"
+      echo "'f [id]' => list files for [id] torrent"
+      ;;
+  esac
+  
+  return 0
+}
+
 function process_dir {
   return 0
 }
@@ -66,4 +109,5 @@ function process_file {
 
 export function dl
 export function mnt
+export function tor
 # end of shell
