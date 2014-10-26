@@ -10,16 +10,22 @@
 #   the first one is the name of the media file to be converted in mp4 format
 #   the next arguments are ffmpeg options to be added between [input] and [output]
 function mp4 {
-   local input ext output
+   local input ext output tmp
    local options=""
+   local factory="./output"
+   
+   [[ $1 ]] || { echo "no arg => exit"; return 1; }
+   [[ -d $factory ]] || mkdir $factory
    
    input="$1";
-   output="${input##*/}.mp4"
+   tmp=${input##*/}
+   output=${tmp%%.*}".mp4"
+   
 
    shift
-   [[ $* ]] && otpions="$*"
+   [[ $* ]] && options="$*"
 
-   ffmpeg -i "$input" -strict -2 $options "$output"
+   ffmpeg -i "$input" -strict -2 $options "$factory/$output"
    
    return 0
 }
