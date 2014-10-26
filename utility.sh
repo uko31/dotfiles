@@ -1,6 +1,9 @@
 #!/bin/bash
 #
 # utility script
+#  added dl  function
+#  added mnt function
+#  added tor function
 #
 # m.gregoriades@gmail.com
 
