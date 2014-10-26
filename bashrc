@@ -8,16 +8,13 @@
 alias ls='ls --color=auto'
 alias ll='ls -lh'
 alias pc='sudo pacman'
-alias tl='transmission-remote nas -l'
-alias fat='mnt fat'
-alias kgb='mnt kgb'
-alias pif='mnt pif'
+alias tn='transmission-remote nas -l'
 alias nas='mnt nas'
+alias dat='mnt dat'
+alias fat='mnt fat'
 
 PS1='[\u@\h \W]\$ '
 
-source $HOME/.src/env.sh
-source $HOME/.src/utility.sh
-source $HOME/.src/multimedia.sh
+source ~/.multimedia.sh
+source ~/.utility.sh
 
-# end of shell
