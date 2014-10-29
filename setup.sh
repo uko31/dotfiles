@@ -17,10 +17,15 @@ function setup_network {
   local sample_configuration_file="/etc/netctl/example/ethernet-static"
 
   echo "=> create network configuration file $configuration_file:"
-  sed -e "s///g" -e "s///g" $sample_configuration_file > $configuration_file
+  sed -e "s/A basic static ethernet connection using iproute/DESCRIPTION=My home connection/g" \
+      -e "s/enp2s0/enp3s0/g" \
+      -e "s/ADDR='192.168.0.200'/ADDR=('192.168.0.$ip_id\/$ip_subnet')/g" \
+      -e "s/GATEWAY='192.168.0.1'/GATEWAY='192.168.1.1'/g" \
+      -e "s/DNS=('192.168.0.1')/DNS=('8.8.8.8' '8.8.4.4')/g" \
+      $sample_configuration_file > .$configuration_file  
   grep -v "^#" $configuration_file
    
-  echo "activation de la configuration réseau:"
+  echo "=> activation de la configuration réseau:"
   systemctl enable ${configuration_file%%/*}
    
   echo "=> mis à jour du hostname:"
