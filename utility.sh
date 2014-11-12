@@ -20,6 +20,30 @@ function log {
   return 0
 }
 
+# subtime function substract two time [hh:mm:ss]
+# and return the result in seconds.
+# return 0 or negative result in case anything goes wrong.
+function subtime {
+   local t1 t2 
+   local h1 m1 s1
+   local h2 m2 s2
+   
+   [[ $1 ]] || return 0
+   [[ $2 ]] || return 0
+   
+   h1=$(echo $1 | cut -d: -f1)
+   m1=$(echo $1 | cut -d: -f2)
+   s1=$(echo $1 | cut -d: -f3)
+   h2=$(echo $2 | cut -d: -f1)
+   m2=$(echo $2 | cut -d: -f2)
+   s2=$(echo $2 | cut -d: -f3)
+      
+   t1=$(( $h1*3600 + $m1*60 + $s1 ))
+   t2=$(( $h2*3600 + $m2*60 + $s2 ))
+   
+   return $(( t2-t1 ))
+}
+
 # dl function assumes that a watchdir is set to put .torrent in it.
 # dl can either take no arg and put all torrent files found in $HOME/download directory
 # or dl can accept one arg per file to be moved.
@@ -110,6 +134,7 @@ function process_file {
   return 0
 }
 
+export function subtime
 export function dl
 export function mnt
 export function tor
