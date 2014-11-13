@@ -7,11 +7,11 @@
 
 alias ls='ls --color=auto'
 alias ll='ls -lh'
-alias pc='sudo pacman'
-alias tn='transmission-remote nas -l'
+alias pacman='sudo pacman'
 alias nas='mnt nas'
 alias dat='mnt dat'
 alias fat='mnt fat'
+alias other='mnt dat && cd .other'
 
 PS1='[\u@\h \W]\$ '
 
