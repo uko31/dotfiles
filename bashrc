@@ -13,8 +13,7 @@ alias dat='mnt dat'
 alias fat='mnt fat'
 alias other='mnt dat && cd .other'
 
-PS1='[\u@\h \W]\$ '
+alias clone-dot="git clone git@github.com:uko31/dotfiles.git"
 
-source ~/.multimedia.sh
 source ~/.utility.sh
 
