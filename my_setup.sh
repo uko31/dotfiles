@@ -35,9 +35,9 @@ echo "$username ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # install a few things
 pacman -Syu
 
-pacman -S rxvt-unicode vim git mplayer opera nvidia xorg-server xorg-server-utils
+pacman -S rxvt-unicode vim git mplayer opera nvidia xorg-server xorg-server-utils ffmpeg
 
-pacman -S awesome vicious lightdm lightdm-gtk-greeter
+pacman -S awesome vicious lightdm lightdm-gtk-greeter xcompmgr
 
 cp /etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf.1
 sed 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-gtk-greeter/' /etc/lightdm/lightdm.conf.1 > /etc/lightdm/lightdm.conf
