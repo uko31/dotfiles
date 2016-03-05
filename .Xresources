@@ -1,0 +1,72 @@
+*background: #282828
+*foreground: #eeeeec
+
+! black
+*color0: #333333 
+*color8: #777777
+
+! red
+*color1: #ff78a3
+*color9: #ffa0be
+
+! green
+*color2: #b6ff93
+*color10: #bdff9d
+
+! yellow
+*color3: #ffd378
+*color11: #ffe0a0
+
+! blue
+*color4: #78a4ff
+*color12: #93b6ff
+
+! magenta
+*color5: #8f78ff
+*color13: #b0a0ff
+
+! cyan
+*color6: #78e7ff
+*color14: #a0eeff
+
+! white
+*color7: #cccbca
+*color15: #fcfcfc
+
+Xft.lcdfilter                :  lcddefault
+Xft.hintstyle                :  hintslight
+Xft.hinting                  :  1
+Xft.autohint                 :  1
+Xft.antialias                :  1
+Xft.dpi                      :  96
+Xft.rgba                     :  rgb
+
+Xcursor.theme                :  Vanilla-DMZ-AA
+
+! URxvt.font                   :  xft:monaco:size=10
+URxvt.font                   :  xft:monospace:size=10
+! URxvt.boldFont               :  xft:monaco:bold:size=10
+URxvt.boldFont               :  xft:monospace:bold:size=10
+
+URxvt.scrollBar              :  false
+URxvt.buffered               :  true
+URxvt.perl-ext-common        :  default,tabbedex,clipboard
+URXVT.iso14755               :  false
+URxvt.tabbed.tabbar-fg       :  8
+URxvt.tabbed.tabbar-bg       :  0
+URxvt.tabbed.tab-fg          :  15
+URxvt.tabbed.tab-bg          :  0
+URxvt.tabbed.autohide        :  true
+URXvt.tabbed.reopen-on-close :  yes
+
+URxvt.perl-ext               :  default,url-select
+URxvt.keysym.C-i             :  perl:url-select:select_next
+URxvt.keysym.Shift-Control-C :  perl:clipboard:copy
+URxvt.keysym.Shift-Control-V :  perl:clipboard:paste
+URxvt.clipboard.copycmd      :  xsel -ib
+URxvt.clipboard.copypaste    :  xsel -ob
+URxvt.url-select.launcher    :  /usr/bin/opera
+URxvt.url-select.underline   :  true
+URxvt.colorUL                :  #78A4FF
+! URxvt.letterSpace            :  0
+URxvt.letterSpace            : -1
