@@ -64,7 +64,7 @@ NR == 1 {
   }
   
   download_info = sprintf( "%s%d: %s\n", download_info, id, name )
-  download_info = sprintf( "%s<span color=\"%s\">%s %s%% (%s)</span>", 
+  download_info = sprintf( "%s<span color=\"%s\">%s %s%% (%s)</span>\n", 
                            download_info, 
                            color, 
                            progress_bar(pct, color), 
