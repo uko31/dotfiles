@@ -57,6 +57,9 @@ editor_cmd = terminal .. " -e " .. editor
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 
+-- default directories
+script_dir = os.getenv( "HOME" ) .. "/.config/scripts"
+
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
 {
@@ -219,11 +222,11 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-ls_downloads_cmd = os.getenv("HOME") .. "/.config/awesome/scripts/ls_downloads.sh"
-rm_downloads_cmd = os.getenv("HOME") .. "/.config/awesome/scripts/rm_downloads.sh"
-ad_downloads_cmd = os.getenv("HOME") .. "/.config/awesome/scripts/ad_downloads.sh"
-mt_usbdrives_cmd = os.getenv("HOME") .. "/.config/awesome/scripts/mt_usbdrives.sh"
-screenshot_cmd   = os.getenv("HOME") .. "/.config/awesome/Scripts/screenshot.sh"
+ls_downloads_cmd = script_dir .. "/ls_downloads.sh"
+rm_downloads_cmd = script_dir .. "/rm_downloads.sh"
+ad_downloads_cmd = script_dir .. "/ad_downloads.sh"
+mt_usbdrives_cmd = script_dir .. "/mt_usbdrives.sh"
+-- screenshot_cmd   = script_dir .. "/screenshot.sh"
 
 globalkeys = awful.util.table.join(
     -- attempt to mount known USB drives:
