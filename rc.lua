@@ -1,15 +1,28 @@
+--- {{{ 
+--
+-- Update: 2016-08
+-- Change log:
+--    
+--  
+--- }}}
+
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+
 -- Widget and layout library
 local wibox = require("wibox")
+local vicious = require("vicious")
+
 -- Theme handling library
 local beautiful = require("beautiful")
+
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+
 -- Lain library
 local lain = require("lain")
 
@@ -38,6 +51,7 @@ do
 end
 -- }}}
 
+-- Transparency handling
 awful.util.spawn_with_shell( "xcompmgr &" )
 
 -- {{{ Variable definitions
@@ -61,17 +75,17 @@ modkey = "Mod4"
 local layouts =
 {
 --    awful.layout.suit.floating,
-    awful.layout.suit.tile,
 --    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
 --    awful.layout.suit.tile.top,
 --    awful.layout.suit.fair,
---   awful.layout.suit.fair.horizontal,
+--    awful.layout.suit.fair.horizontal,
 --    awful.layout.suit.spiral,
 --    awful.layout.suit.spiral.dwindle,
 --    awful.layout.suit.max,
 --    awful.layout.suit.max.fullscreen,
 --    awful.layout.suit.magnifier
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.bottom,
 }
 -- }}}
 
@@ -88,35 +102,57 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    -- tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5 }, s, layouts[1])
 end
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
+  { "manual",      terminal .. " -e man awesome" },
+  { "edit config", editor_cmd .. " " .. awesome.conffile },
+  { "restart",     awesome.restart },
+  { "quit",        awesome.quit }
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+mymainmenu = awful.menu(
+  { items = 
+    { { "awesome", myawesomemenu, beautiful.awesome_icon },
+      { "open terminal", terminal }
+    }
+  }
+)
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
+mylauncher = awful.widget.launcher(
+  { image = beautiful.awesome_icon,
+    menu = mymainmenu 
+  }
+)
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- {{{ Wibox
+
+-- Create a Separator
+separator = wibox.widget.textbox()
+separator:set_text("|")
+  
 -- Create a textclock widget
-mytextclock = awful.widget.textclock( "%d/%m %H:%M" )
+mytextclock = awful.widget.textclock( "<span color='white'> %d/%m %H:%M </span>" )
+
+
+-- MPD widget
+mpdwidget = wibox.widget.textbox()
+vicious.register(mpdwidget, vicious.widgets.mpd,
+    function (mpdwidget, args)
+        if args["{state}"] == "Pause" or args['{state}'] == "Stop" then 
+            return '<span color="gray"> Music State is "' .. args['{state}'] .. '"</span>'
+        else 
+            return '<span color="light blue"> Playing "'..args["{Artist}"]..' - '.. args["{Title}"]..'"</span> '
+        end
+    end, 10)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -194,16 +230,23 @@ for s = 1, screen.count() do
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
 
+    -- Widgets that are centered
+    local center_layout = wibox.layout.fixed.horizontal()
+    
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    --center_layout:add(separator)
+    center_layout:add(mpdwidget)
+    --center_layout:add(separator)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
     layout:set_left(left_layout)
-    layout:set_middle(mytasklist[s])
+    --layout:set_middle(mytasklist[s])
+    layout:set_middle(center_layout)
     layout:set_right(right_layout)
 
     mywibox[s]:set_widget(layout)
@@ -262,6 +305,23 @@ globalkeys = awful.util.table.join(
     ), 
     -- list downloads popup info:
     awful.key(
+      { modkey, }, "*",
+      function()
+        naughty.notify(
+          {
+          title    = "Add Song to Top Rated List",
+          text     = awful.util.pread( "ratesong 5" ),
+          timeout  = 6,
+          position = "bottom_right",
+          icon     = "/usr/share/pixmaps/star-icon-32.png",
+          width    = 600,
+          opacity  = 0.8
+          }
+        )
+      end
+    ), 
+    -- list downloads popup info:
+    awful.key(
       { modkey, }, "d",
       function()
         naughty.notify(
@@ -270,6 +330,7 @@ globalkeys = awful.util.table.join(
           text     = awful.util.pread( ls_downloads_cmd ),
           timeout  = 4,
           position = "bottom_right",
+          icon     = "/usr/share/pixmaps/red-download-icon-32.png",
           width    = 600,
           opacity  = 0.8
           }
@@ -286,6 +347,7 @@ globalkeys = awful.util.table.join(
           text     = awful.util.pread( rm_downloads_cmd ),
           timeout  = 4,
           position = "bottom_right",
+          icon     = "/usr/share/pixmaps/red-cross-icon-32.png",
           width    = 600,
           opacity  = 0.8
           }
@@ -302,6 +364,7 @@ globalkeys = awful.util.table.join(
           text     = awful.util.pread( ad_downloads_cmd ),
           timeout  = 4,
           position = "bottom_right",
+          icon     = "/usr/share/pixmaps/red-plus-icon-32.png",
           width    = 600,
           opacity  = 0.8
           }
